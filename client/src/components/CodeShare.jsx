@@ -10,6 +10,8 @@ const socket = io('http://localhost:4000');
 function CodeShare() {
   const { id } = useParams();
   const [code, setCode] = useState('');
+  const [uniqueId,setUniqueId] = useState('');
+  const navigate = useNavigate();
 
   // useEffect for socket.io setup
   useEffect(() => {
@@ -27,18 +29,21 @@ function CodeShare() {
     };
   }, [id]);
 
-  // Function to handle input change for connecting code
+  
   const connectCode = (event) => {
     const inputCode = event.target.value;
-    setCode(inputCode); // Update the state with the input field's value
-    console.log(inputCode); // You can log the input value if needed
+    setUniqueId(inputCode);
+    console.log(inputCode);
   };
 
-  // Function to handle code changes in CodeEditor and emit to socket
+  const joinRoom = ()=>{
+    navigate(`/code-share/${uniqueId}`);
+  }
+
+  
   const handleChange = (newCode) => {
     setCode(newCode);
     socket.emit('code-change', newCode, id);
-    // localStorage.setItem('code', newCode); // Uncomment if needed
   };
 
   return (
@@ -53,7 +58,7 @@ function CodeShare() {
           </div>
           <div className="flex gap-5 justify-center items-center">
             <input type="text" placeholder="enter code to connect "  onChange={connectCode} className="p-1 text-black " />
-            <button className="bg-white text-black px-2 py-1 rounded">CONNECT</button>
+            <button className="bg-white text-black px-2 py-1 rounded" onClick={joinRoom}>CONNECT</button>
           </div>
         </div>
         <CodeEditor code={code} onChange={handleChange} />

@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
@@ -16,15 +15,15 @@ const io = socketIo(server, {
 const rooms = {};
 
 io.on('connection', (socket) => {
-  console.log(`user with id ${socket.id} connected`);
-  
+  console.log(`User with id ${socket.id} connected`);
+
   socket.on('join-room', (roomId) => {
     socket.join(roomId);
     if (!rooms[roomId]) {
       rooms[roomId] = [];
     }
     rooms[roomId].push(socket.id);
-    console.log(`user with id ${socket.id} joined room ${roomId}`);
+    console.log(`User with id ${socket.id} joined room ${roomId}`);
   });
 
   socket.on('leave-room', (roomId) => {
@@ -35,7 +34,7 @@ io.on('connection', (socket) => {
         delete rooms[roomId];
       }
     }
-    console.log(`user with id ${socket.id} left room ${roomId}`);
+    console.log(`User with id ${socket.id} left room ${roomId}`);
   });
 
   socket.on('code-change', (code, roomId) => {
@@ -49,7 +48,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log(`user with id ${socket.id} disconnected`);
+    console.log(`User with id ${socket.id} disconnected`);
     // Remove socket from all rooms it was part of
     Object.keys(rooms).forEach(roomId => {
       rooms[roomId] = rooms[roomId].filter(id => id !== socket.id);
@@ -58,8 +57,24 @@ io.on('connection', (socket) => {
       }
     });
   });
+
+  // WebRTC signaling using the existing roomId
+  socket.on('offer', (data) => {
+    const { offer, roomId } = data;
+    socket.to(roomId).emit('offer', { offer, socketId: socket.id });
+  });
+
+  socket.on('answer', (data) => {
+    const { answer, roomId } = data;
+    socket.to(roomId).emit('answer', { answer, socketId: socket.id });
+  });
+
+  socket.on('ice-candidate', (data) => {
+    const { candidate, roomId } = data;
+    socket.to(roomId).emit('ice-candidate', { candidate, socketId: socket.id });
+  });
 });
 
 server.listen(4000, () => {
-  console.log('listening on : 4000');
+  console.log('Listening on :4000');
 });

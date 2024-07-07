@@ -15,7 +15,7 @@ const CodeEditor = ({ code, readOnly, onChange }) => {
 
   return (
     <MonacoEditor
-      height="85vh"
+      height="70vh"
       width="70vw"
       language="javascript"
       theme="vs-dark"

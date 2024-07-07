@@ -2,7 +2,8 @@ import React from 'react';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { generateUniqueId } from './services/Api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
+
 
 const navigation = [
   { name: 'Language Converter', href: '#', current: false },
@@ -40,9 +41,11 @@ export default function Navbar() {
                 </DisclosureButton>
               </div>
               <div className="flex flex-1 items-center justify-between sm:items-stretch sm:justify-between">
-                <div className="flex items-center">
-                  <h1 className='text-white font-bold text-3xl'>CODEMORPH</h1>
-                </div>
+              
+              <Link to="/" className="flex items-center">
+              <h1 className='text-white font-bold text-3xl cursor-pointer'>CODEMORPH</h1>
+              </Link> 
+              
                 <div className="hidden sm:flex items-center justify-center space-x-4">
                   <button
                     onClick={handleCodeShareClick}

@@ -5,11 +5,11 @@ require('dotenv').config();
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 const langCoverter = async(req,res)=> {
-    const {sourceLanguage,targetLanguage,code} = req.body
+    const {targetLanguage,code} = req.body
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   
     const prompt = `
-    Convert the following ${sourceLanguage} code to ${targetLanguage} code without explanations:
+    Convert the following code to ${targetLanguage} code without explanations and give only the code:
     ${code}
     `;
     try {

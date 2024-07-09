@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 function generateUniqueId(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -8,4 +10,16 @@ function generateUniqueId(length = 8) {
     return result;
 }
 
-export {generateUniqueId}
+async function codeConverter (sourceCode,targetLanguage) {
+  try {
+    const response = await axios.post('http://localhost:4000/api/v1/language-converter', {
+      code: sourceCode,
+      targetLanguage,
+    });
+    return response.data
+  } catch (error) {
+    console.error('Error converting code:', error);
+  }
+}
+
+export {generateUniqueId,codeConverter}

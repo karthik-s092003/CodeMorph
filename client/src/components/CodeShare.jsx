@@ -153,12 +153,12 @@ function CodeShare() {
   return (
     <>
       <Navbar />
-      <div className="flex flex-col justify-center items-center w-screen h-screen   backgroundimage gap-4">
-        <h1 className="text-white font-bold text-5xl">Code Share</h1>
-        <div className="flex justify-between gap-10 w-[90vw] text-white font-bold">
-        <div className="flex gap-5 justify-center items-center">
+      <div className="flex flex-col justify-center items-center w-screen h-screen  backgroundimage gap-4">
+        <h1 className="text-white font-bold text-5xl ">Code Share</h1>
+        <div className="flex justify-between gap-10 w-[90vw] text-white font-bold  ">
+        <div className="flex gap-5 justify-center items-center ">
         <h1>ROOM ID: {id}</h1>
-        <button className="bg-white text-black px-2 py-1 rounded" onClick={() => navigator.clipboard.writeText(id)}>COPY</button>
+        <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={() => navigator.clipboard.writeText(id)}>COPY</button>
         </div>
           <div className="flex gap-5 justify-center items-center">
           <TextField
@@ -191,15 +191,15 @@ function CodeShare() {
                 },
               }}
             />
-            <button className="bg-white text-black px-2 py-1 rounded" onClick={joinRoom}>
+            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={joinRoom}>
               CONNECT
             </button>
-            <button className="bg-white text-black px-2 py-1 rounded" onClick={handleVideoChatToggle}>
+            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={handleVideoChatToggle}>
               {videoButtonText}
             </button>
           </div>
         </div>
-        <div className='flex gap-20'>
+        <div className='flex gap-20  '>
           <CodeEditor code={code} onChange={handleChange} />
           {vidchat && (
             <div className="flex flex-col gap-10">

@@ -7,7 +7,7 @@ import { useNavigate,Link } from 'react-router-dom';
 
 const navigation = [
   { name: 'Language Converter', href: '/lang-converter', current: false },
-  { name: 'Error Corrector', href: '#', current: false },
+  { name: 'Error Corrector', href: '/error-corrector', current: false },
 ];
 
 function classNames(...classes) {

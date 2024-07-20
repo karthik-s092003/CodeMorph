@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/home'; 
 import CodeShare from './components/CodeShare';
 import CodeConverter from './language-converter/codeConverter';
+import ErrorCorrector from './error-corrector/error-corrector';
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/code-share/:id" element={<CodeShare/>} />
         <Route path="/lang-converter" element={<CodeConverter/>}/>
+        <Route path="/error-corrector" element={<ErrorCorrector/>}/>
       </Routes>
     </Router>
   );

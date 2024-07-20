@@ -22,4 +22,15 @@ async function codeConverter (sourceCode,targetLanguage) {
   }
 }
 
-export {generateUniqueId,codeConverter}
+async function errorCorrector(code) {
+  try {
+    const response = await axios.post('http://localhost:4000/api/v1/error-corrector', {
+      code: code
+    });
+    return response.data
+  } catch (error) {
+    console.error('Error converting code:', error);
+  }
+}
+
+export {generateUniqueId,codeConverter,errorCorrector}

@@ -84,6 +84,10 @@ io.on('connection', (socket) => {
 
 const port = process.env.PORT || 4000
 
+app.get("/",(req,res)=>{
+  res.send("server running....")
+})
+
 const start = async ()=>{
     try {
         app.listen(port,console.log(`app listening at port ${port}...`))

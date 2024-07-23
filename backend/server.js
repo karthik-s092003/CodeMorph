@@ -82,6 +82,14 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(4000, () => {
-  console.log('Listening on :4000');
-});
+const port = process.env.PORT || 4000
+
+const start = async ()=>{
+    try {
+        app.listen(port,console.log(`app listening at port ${port}...`))
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+start()

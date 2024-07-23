@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { MdMicOff, MdMic, MdVideocamOff, MdVideocam } from 'react-icons/md';
 import io from 'socket.io-client';
 import CodeEditor from './CodeEditor';
 import { useParams } from 'react-router-dom';
@@ -18,8 +19,10 @@ function CodeShare() {
   const peerConnectionRef = useRef(null);
   const localStreamRef = useRef(null);
   const remoteStreamRef = useRef(new MediaStream());
-  const [vidchat, setvidchat] = useState(false);
+  const [vidchat, setVidchat] = useState(false);
   const [videoButtonText, setVideoButtonText] = useState('Start Video Chat');
+  const [isMuted, setIsMuted] = useState(false);
+  const [isVideoOff, setIsVideoOff] = useState(false);
 
   useEffect(() => {
     socket.emit('join-room', id);
@@ -38,12 +41,10 @@ function CodeShare() {
 
   useEffect(() => {
     return () => {
-      // Close the local stream
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
       }
 
-      // Close the peer connection
       if (peerConnectionRef.current) {
         peerConnectionRef.current.close();
       }
@@ -68,7 +69,7 @@ function CodeShare() {
   const handleVideoChatToggle = async () => {
     if (!vidchat) {
       try {
-        setvidchat(true);
+        setVidchat(true);
         setVideoButtonText('Stop Video Chat');
         const localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localVideoRef.current.srcObject = localStream;
@@ -136,7 +137,6 @@ function CodeShare() {
         console.error('Error accessing media devices:', error);
       }
     } else {
-      // Stop Video Chat
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach((track) => track.stop());
         localStreamRef.current = null;
@@ -145,23 +145,37 @@ function CodeShare() {
         peerConnectionRef.current.close();
         peerConnectionRef.current = null;
       }
-      setvidchat(false);
+      setVidchat(false);
       setVideoButtonText('Start Video Chat');
+    }
+  };
+
+  const handleMuteToggle = () => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getAudioTracks().forEach(track => track.enabled = !isMuted);
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleCameraToggle = () => {
+    if (localStreamRef.current) {
+      localStreamRef.current.getVideoTracks().forEach(track => track.enabled = !isVideoOff);
+      setIsVideoOff(!isVideoOff);
     }
   };
 
   return (
     <>
       <Navbar />
-      <div className="flex flex-col justify-center items-center w-screen h-screen  backgroundimage gap-4">
-        <h1 className="text-white font-bold text-5xl ">Code Share</h1>
-        <div className="flex justify-between gap-10 w-[90vw] text-white font-bold  ">
-        <div className="flex gap-5 justify-center items-center ">
-        <h1>ROOM ID: {id}</h1>
-        <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={() => navigator.clipboard.writeText(id)}>COPY</button>
-        </div>
+      <div className="flex flex-col justify-center items-center w-screen h-screen backgroundimage gap-4">
+        <h1 className="text-white font-bold text-5xl">Code Share</h1>
+        <div className="flex justify-between gap-10 w-[90vw] text-white font-bold">
           <div className="flex gap-5 justify-center items-center">
-          <TextField
+            <h1>ROOM ID: {id}</h1>
+            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white" onClick={() => navigator.clipboard.writeText(id)}>COPY</button>
+          </div>
+          <div className="flex gap-5 justify-center items-center">
+            <TextField
               id="outlined-basic"
               label="Enter code to connect"
               variant="outlined"
@@ -180,7 +194,7 @@ function CodeShare() {
                   },
                   '& input': {
                     color: 'white', // Text color
-                    height:'20px'                
+                    height: '20px'
                   },
                 },
                 '& .MuiInputLabel-root': {
@@ -191,25 +205,38 @@ function CodeShare() {
                 },
               }}
             />
-            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={joinRoom}>
+            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white" onClick={joinRoom}>
               CONNECT
             </button>
-            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white " onClick={handleVideoChatToggle}>
+            <button className="bg-white text-black px-2 py-1 rounded hover:bg-black hover:text-white" onClick={handleVideoChatToggle}>
               {videoButtonText}
             </button>
           </div>
         </div>
-        <div className='flex gap-20  '>
+        <div className='flex gap-20'>
           <CodeEditor code={code} onChange={handleChange} />
           {vidchat && (
-            <div className="flex flex-col gap-10">
-              <div className="w-52">
-                <h2 className="text-white text-center font-bold text-2xl mb-2">Local Video</h2>
-                <video ref={localVideoRef} autoPlay playsInline className="w-full"></video>
+            <div className="flex flex-col gap-6 p-4">
+              <div className="flex flex-col items-center relative">
+                <h2 className="text-white text-xl font-bold mb-2">Local Video</h2>
+                <div className="relative w-52 h-40 bg-gray-800 rounded-md overflow-hidden">
+                  <video ref={localVideoRef} autoPlay playsInline className="w-full h-full object-cover"></video>
+                  {/* Add controls for local video */}
+                  <div className="absolute bottom-2 left-2 flex gap-2">
+                    <button className="p-2 bg-gray-700 rounded-full text-white" onClick={handleMuteToggle}>
+                      {isMuted ? <MdMicOff size={24} /> : <MdMic size={24} />}
+                    </button>
+                    <button className="p-2 bg-gray-700 rounded-full text-white" onClick={handleCameraToggle}>
+                      {isVideoOff ? <MdVideocamOff size={24} /> : <MdVideocam size={24} />}
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="w-52">
-                <h2 className="text-white font-bold text-center text-2xl mb-2">Remote Video</h2>
-                <video ref={remoteVideoRef} autoPlay playsInline className="w-full"></video>
+              <div className="flex flex-col items-center relative">
+                <h2 className="text-white text-xl font-bold mb-2">Remote Video</h2>
+                <div className="relative w-52 h-40 bg-gray-800 rounded-md overflow-hidden">
+                  <video ref={remoteVideoRef} autoPlay playsInline className="w-full h-full object-cover"></video>
+                </div>
               </div>
             </div>
           )}

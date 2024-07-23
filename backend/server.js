@@ -13,7 +13,7 @@ app.use("/api/v1", Router);
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:5173", // Replace with your frontend origin
+    origin: "https://code-morph.vercel.app", // Replace with your frontend origin
     methods: ["GET", "POST"]
   }
 });

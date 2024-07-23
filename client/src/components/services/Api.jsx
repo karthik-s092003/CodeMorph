@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const FETCHURI = "https://codemorph.onrender.com/api/v1"
+
 function generateUniqueId(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
@@ -12,7 +14,7 @@ function generateUniqueId(length = 8) {
 
 async function codeConverter (sourceCode,targetLanguage) {
   try {
-    const response = await axios.post('http://localhost:4000/api/v1/language-converter', {
+    const response = await axios.post(`${FETCHURI}/language-converter`, {
       code: sourceCode,
       targetLanguage,
     });
@@ -24,7 +26,7 @@ async function codeConverter (sourceCode,targetLanguage) {
 
 async function errorCorrector(code) {
   try {
-    const response = await axios.post('http://localhost:4000/api/v1/error-corrector', {
+    const response = await axios.post(`${FETCHURI}/error-corrector`, {
       code: code
     });
     return response.data

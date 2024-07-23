@@ -5,24 +5,24 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const Router = require("./routes/routes")
+const Router = require("./routes/routes");
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1", Router);
+
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
-    origin: "https://code-morph.vercel.app", // Replace with your frontend origin
+    origin: "http://localhost:5173", // Replace with your frontend origin
     methods: ["GET", "POST"]
   }
 });
 
-// Store rooms in an object where key is the room ID and value is an array of socket IDs
 const rooms = {};
 
 io.on('connection', (socket) => {
-  console.log(`User with id ${socket.id} connected`);
+  console.log(`User with id ${socket.id} connected`); // This should log when a client connects
 
   socket.on('join-room', (roomId) => {
     socket.join(roomId);
@@ -56,7 +56,6 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log(`User with id ${socket.id} disconnected`);
-    // Remove socket from all rooms it was part of
     Object.keys(rooms).forEach(roomId => {
       rooms[roomId] = rooms[roomId].filter(id => id !== socket.id);
       if (rooms[roomId].length === 0) {
@@ -65,7 +64,7 @@ io.on('connection', (socket) => {
     });
   });
 
-  // WebRTC signaling using the existing roomId
+  // WebRTC signaling
   socket.on('offer', (data) => {
     const { offer, roomId } = data;
     socket.to(roomId).emit('offer', { offer, socketId: socket.id });
@@ -82,18 +81,18 @@ io.on('connection', (socket) => {
   });
 });
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 4000;
 
-app.get("/",(req,res)=>{
-  res.send("server running....")
-})
+app.get("/", (req, res) => {
+  res.send("Server running...");
+});
 
-const start = async ()=>{
-    try {
-        app.listen(port,console.log(`app listening at port ${port}...`))
-    } catch (error) {
-        console.log(error)
-    }
-}
+const start = async () => {
+  try {
+    server.listen(port, () => console.log(`App listening at port ${port}...`));
+  } catch (error) {
+    console.log(error);
+  }
+};
 
-start()
+start();

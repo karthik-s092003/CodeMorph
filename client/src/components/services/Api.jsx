@@ -2,6 +2,8 @@ import axios from 'axios';
 
 const FETCHURI = "https://codemorph.onrender.com/api/v1"
 
+// const FETCHURI = "http://localhost:4000/api/v1"
+
 function generateUniqueId(length = 8) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';

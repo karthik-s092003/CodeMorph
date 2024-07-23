@@ -7,7 +7,7 @@ import Navbar from './navbar';
 import { useNavigate } from 'react-router-dom';
 import TextField from '@mui/material/TextField';
 
-const socket = io('http://localhost:4000');
+const socket = io('https://codemorph.onrender.com');
 
 function CodeShare() {
   const { id } = useParams();

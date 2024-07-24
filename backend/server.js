@@ -7,7 +7,8 @@ const path = require("path");
 
 const app = express();
 
-console.log(staticPath); 
+const staticPath = path.resolve(__dirname,"dist");
+ 
 const Router = require("./routes/routes");
 app.use(cors());
 app.use(express.json());
@@ -15,7 +16,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/v1", Router);
 app.use(express.static(staticPath));
 
-const staticPath = path.resolve(__dirname,"dist");
 const server = http.createServer(app);
 const io = socketIo(server, {
   cors: {

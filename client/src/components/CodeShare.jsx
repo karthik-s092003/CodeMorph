@@ -153,7 +153,7 @@ function CodeShare() {
   const handleMuteToggle = () => {
     if (localStreamRef.current) {
       localStreamRef.current.getAudioTracks().forEach(track => {
-        track.enabled = isMuted;
+        track.enabled = !isMuted;
       });
       setIsMuted(!isMuted);
     }
@@ -162,7 +162,7 @@ function CodeShare() {
   const handleCameraToggle = () => {
     if (localStreamRef.current) {
       localStreamRef.current.getVideoTracks().forEach(track => {
-        track.enabled = isVideoOff;
+        track.enabled = !isVideoOff;
       });
       setIsVideoOff(!isVideoOff);
     }

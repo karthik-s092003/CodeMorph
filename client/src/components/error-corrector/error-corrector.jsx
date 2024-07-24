@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Navbar from '../components/navbar';
+import Navbar from '../navbar';
 import { Comment } from 'react-loader-spinner';
 
-import { errorCorrector } from '../components/services/Api';
+import { errorCorrector } from '../services/Api';
 
 const ErrorCorrector = () => {
   const [sourceCode, setSourceCode] = useState('');

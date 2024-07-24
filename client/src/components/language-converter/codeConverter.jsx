@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MonacoEditor from '@monaco-editor/react';
-import Navbar from '../components/navbar';
-import { codeConverter } from '../components/services/Api';
+import Navbar from '../navbar';
+import { codeConverter } from '../services/Api';
 
 const CodeConverter = () => {
   const [sourceCode, setSourceCode] = useState('');

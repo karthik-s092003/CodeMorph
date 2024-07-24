@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/home'; 
 import CodeShare from './components/CodeShare';
-import CodeConverter from './language-converter/codeConverter';
-import ErrorCorrector from './error-corrector/error-corrector';
+import CodeConverter from './components/language-converter/codeConverter';
+import ErrorCorrector from './components/error-corrector/error-corrector';
 
 function App() {
   return (

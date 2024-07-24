@@ -3,8 +3,12 @@ const http = require('http');
 const socketIo = require('socket.io');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require("path");
 
 const app = express();
+
+const staticPath = path.resolve(__dirname,'.',"dist");
+console.log(staticPath); 
 const Router = require("./routes/routes");
 app.use(cors());
 app.use(express.json());
@@ -86,6 +90,15 @@ const port = process.env.PORT || 4000;
 app.get("/", (req, res) => {
   res.send("Server running...");
 });
+
+
+if(process.env.NODE_ENV === "production"){
+  app.get("*",(req,res)=>{
+    app.use(express.static(staticPath));
+    const indexFile = path.join(__dirname,"dist","index.html");
+    return res.sendFile(indexFile);
+  })
+}
 
 const start = async () => {
   try {

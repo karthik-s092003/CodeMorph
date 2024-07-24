@@ -87,10 +87,6 @@ io.on('connection', (socket) => {
 
 const port = process.env.PORT || 4000;
 
-app.get("/", (req, res) => {
-  res.send("Server running...");
-});
-
 
 if(process.env.NODE_ENV === "production"){
   app.get("*",(req,res)=>{
